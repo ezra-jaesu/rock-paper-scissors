@@ -1,4 +1,7 @@
 console.log("Hello, World!");
+let humanScore = 0;
+let computerScore = 0;
+
 // I was gonna use arrays but I've challenged myself that I will not use them.
 // The array method is more maintanable but for challenge's sake, let's go with conditionals.
 // const itemChoices = ["rock", "paper", "scissors"];
