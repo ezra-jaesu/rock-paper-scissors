@@ -38,3 +38,42 @@ const getComputerChoice = (randomDecimal = Math.random()) =>
 
 const getHumanChoice = () =>
   prompt("Please pick one: rock, paper or scissors", getComputerChoice());
+
+const playRound = (humanChoice, computerChoice) => {
+  // Making it case-sensitive
+  humanChoice = humanChoice.toLowerCase();
+
+  // Check for draws first
+  // The number of cases are killing me aauuuuggghhhh
+  // I actually have a tricky ahh idea lol
+  // If you watch carefully, this almost encapsulates the whole game
+  // scissors (7 char) > paper (5) > rock (4)
+  // Except when
+  // rock (4) > scissors (7)
+  // To alleviate this, we check for that condition
+  // Now we have two win conditions
+  // Human plays Rock and Computer plays Scissors OR
+  // Human plays something larger than what computer plays.
+  // NOTE: The second condition only applies after excluding if player played rock
+  //       since the only possible permutation there is h=rock and c=paper.
+
+  const result =
+    humanChoice === computerChoice
+      ? "draw"
+      : humanChoice === "rock" && computerChoice === "scissors"
+        ? "win"
+        : humanChoice.length > computerChoice.length && humanChoice !== 4
+          ? "win"
+          : "lose";
+
+  switch (result) {
+    case "draw":
+      return "It's a draw!!!";
+    case "win":
+      humanScore++;
+      return `You win! ${humanChoice} beats ${computerChoice}`;
+    case "lose":
+      computerScore++;
+      return `You lose! ${computerChoice} beats ${humanChoice}`;
+  }
+};
