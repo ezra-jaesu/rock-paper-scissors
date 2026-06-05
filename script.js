@@ -83,9 +83,11 @@ let getHumanChoice = () => {
         ? "draw"
         : humanChoice === "rock" && computerChoice === "scissors"
           ? "win"
-          : humanChoice.length > computerChoice.length && humanChoice !== 4
-            ? "win"
-            : "lose";
+          : humanChoice === "scissors" && computerChoice === "rock" 
+	    ? "lose"
+	    :humanChoice.length > computerChoice.length && humanChoice !== 4
+		? "win"
+		: "lose";
 
     switch (result) {
       case "draw":
