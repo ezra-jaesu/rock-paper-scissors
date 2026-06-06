@@ -1,66 +1,33 @@
-console.log("Hello, World!");
+console.log("Hello World!");
 
-const playGame = () => {
-  let humanScore = 0;
-  let computerScore = 0;
+let humanScore = 0;
+let computerScore = 0;
 
-  // I was gonna use arrays but I've challenged myself that I will not use them.
-  // The array method is more maintanable but for challenge's sake, let's go with conditionals.
-  // const itemChoices = ["rock", "paper", "scissors"];
+// I was gonna use arrays but I've challenged myself that I will not use them.
+// The array method is more maintanable but for challenge's sake, let's go with conditionals.
 
-  //  I just realized I can refactor both these functions to just return the value themselves.
-
-  /*
-  let getComputerChoice = () => {
-  const randomDecimal = Math.random();
-
-  // I think this is technically bad practice? Clever code but unmaintainable.
-  // if value is 1.00 - 0.67, return rock
-  // elif value is 0.66 - 0.34, return paper
-  // else return scissors
-
-  return randomDecimal > 0.66
-    ? "rock"
-    : randomDecimal > 0.33
-      ? "paper"
-      : "scissors";
-};
-
-let getHumanChoice = () => {
-  return prompt(
-    "Please pick one: rock, paper or scissors",
-    getComputerChoice(),
-  );
-};
-
-*/
-
-  // This function is just so beatiful!!! SO SEXY!!!
-  const getComputerChoice = (randomDecimal = Math.random()) =>
+// This function is just so beatiful!!! SO SEXY!!!
+const getComputerChoice = (randomDecimal = Math.random()) =>
     randomDecimal > 0.66 ? "rock" : randomDecimal > 0.33 ? "paper" : "scissors";
 
-  const getHumanChoice = () =>
-    prompt("Please pick one: rock, paper or scissors", getComputerChoice());
+const getHumanChoice = (e) => {
+    const humanChoice =
+        e.target.id === "random" ? getComputerChoice() : e.target.id;
 
-  const announceWinner = (gameResult) => {
-    const message =
-      gameResult === "draw"
-        ? "The game is a draw."
-        : gameResult === "win"
-          ? "You win the game!"
-          : "You lose the game!";
-    alert(
-      `Here are the final scores:
-       You: ${humanScore}
-       Clanker: ${computerScore}
+    const scoreContainer = document.querySelector("#scoreContainer");
 
-       ${message}
-      `,
-    );
+    const message = document.querySelector("#message");
+    message.innerText = playRound(humanChoice, getComputerChoice());
 
-    return message;
-  };
-  const playRound = (humanChoice, computerChoice) => {
+    scoreContainer.children[0].innerText = `Human: ${humanScore}`;
+    scoreContainer.children[1].innerText = `Computer: ${computerScore}`;
+
+    if (humanScore === 5) message.innerText = "You win the game!";
+    if (computerScore === 5) message.innerText = "You lose the game!";
+    if (humanScore === 5 || computerScore === 5) humanScore = computerScore = 0;
+};
+
+const playRound = (humanChoice, computerChoice) => {
     // Making it case-sensitive
     humanChoice = humanChoice.toLowerCase();
 
@@ -79,53 +46,34 @@ let getHumanChoice = () => {
     //       since the only possible permutation there is h=rock and c=paper.
 
     const result =
-      humanChoice === computerChoice
-        ? "draw"
-        : humanChoice === "rock" && computerChoice === "scissors"
-          ? "win"
-          : humanChoice === "scissors" && computerChoice === "rock" 
-	    ? "lose"
-	    :humanChoice.length > computerChoice.length && humanChoice !== 4
-		? "win"
-		: "lose";
+        humanChoice === computerChoice
+            ? "draw"
+            : humanChoice === "rock" && computerChoice === "scissors"
+              ? "win"
+              : humanChoice === "scissors" && computerChoice === "rock"
+                ? "lose"
+                : humanChoice.length > computerChoice.length
+                  ? "win"
+                  : "lose";
 
     switch (result) {
-      case "draw":
-        return "It's a draw!!!";
-      case "win":
-        humanScore++;
-        return `You win! ${humanChoice} beats ${computerChoice}`;
-      case "lose":
-        computerScore++;
-        return `You lose! ${computerChoice} beats ${humanChoice}`;
+        case "draw":
+            return "It's a draw!!!";
+        case "win":
+            humanScore++;
+            return `You win! ${humanChoice} beats ${computerChoice}.`;
+        case "lose":
+            computerScore++;
+            return `You lose! ${computerChoice} beats ${humanChoice}.`;
     }
-  };
-
-  for (let i = 0; i < 5; i++) {
-    const message = playRound(getHumanChoice(), getComputerChoice());
-    alert(
-      `Here are the current scores:
-       You: ${humanScore}
-       Clanker: ${computerScore}
-
-       ${message}
-      `,
-    );
-
-    if (humanScore === 3) {
-      return announceWinner("win");
-    }
-    if (computerScore === 3) {
-      return announceWinner("lose");
-    }
-  }
-
-  const gameResult =
-    humanScore === computerScore
-      ? "draw"
-      : humanScore > computerScore
-        ? "win"
-        : "lose";
-
-  return announceWinner(gameResult);
 };
+
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+const random = document.querySelector("#random");
+const choices = document.querySelector("#choices");
+
+[...choices.children].forEach((el) => {
+    el.addEventListener("click", (e) => getHumanChoice(e));
+});
